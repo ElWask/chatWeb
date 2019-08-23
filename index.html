@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      body {
+        font: 20px Helvetica, Arial;
+      }
+      #chatContainer{
+        display: flex;
+        flex-flow: column nowrap;
+        height: 98vh;
+        background-color: pink;
+      }
+      #messages {
+        list-style-type: none;
+      }
+      #messages li:nth-child(odd) { background: #eee; }
+
+      #inputSendContainer {
+        align-self: center;
+        margin-top:auto;
+      }
+      #chatInput{
+        width: 83vw;
+        height: 5vh;
+      }
+      #chatBtn{
+        width: 10vw;
+        height: 5vh;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="chatContainer">
+      <ul id="messages"></ul>
+      <div id="inputSendContainer">
+          <input type="text" name="chatInput" id="chatInput">
+          <button id="chatBtn">Send!</button>
+      </div>
+      <div id="btnOptionsContainer">
+          <button id="changeColorBtn">Rouge!</button>
+      </div>      
+    </div>
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      let _Username = "";
+        init = () => {
+          let socket = io();
+
+          // on ENTER pressed
+          chatInput.addEventListener('keypress', (e) => {
+            if(!e) e = window.event
+            let keyCode = e.keyCode || e.which
+            if(keyCode == "13"){
+              socket.emit('chat message', chatInput.value);
+              chatInput.value = ""
+              return false
+            }
+          })
+          // on button Send pressed
+          chatBtn.addEventListener("click", () => {
+              socket.emit('chat message', chatInput.value);
+              chatInput.value = ""
+          })
+
+          // on button change color pressed
+          changeColorBtn.addEventListener("click", () => {
+            socket.emit('change color', "red");
+          })
+
+// --------RECEIVING REQUESTS----------------- //
+
+          socket.on("welcome", xMsg => {
+            sendMessage(xMsg)
+          })
+
+          socket.on("user connected", username => {
+            sendMessage(`${username} is connected`)
+          })
+
+          socket.on("user disconnected", data => {
+            sendMessage(`${data} is disconnected`)
+          })
+
+          // answer value with chat message from backend
+          socket.on("chat message", (data) => {
+            sendMessage(`${data.name} : ${data.msg}`)
+          })
+
+          // answer value with chat message from backend
+          socket.on("loadHistory", (xHist) => {
+            loadHistory(xHist)
+          })
+
+          // answer value with change color from backend
+          socket.on("change color", function(xColor){
+            document.body.style.backgroundColor = xColor;
+          })
+
+// -------- END RECEIVING REQUESTS----------------- //
+
+        }
+
+        sendMessage = xMsg => {
+          let node = document.createElement("LI")
+          let txtNode = document.createTextNode(xMsg)      // Create a text node
+          node.appendChild(txtNode)                      // Append the text to <li>
+          messages.appendChild(node)
+        }
+
+        loadHistory = xHist => {
+          xHist.forEach(el => {
+            sendMessage(`${el.usr} : ${el.msg}`)
+          });
+        }
+
+        init()
+    </script>
+  </body>
+</html>
