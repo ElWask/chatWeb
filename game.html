@@ -9,16 +9,14 @@
       <div id="onlineBox">
         <ul id="onlineList"></ul>
       </div>
-      <ul id="messages"></ul>
-      <div id="inputSendContainer">
-          <input type="text" name="chatInput" id="chatInput">
-          <button id="chatBtn">Send!</button>
-      </div>
+      <canvas width="300" height="200"></canvas>
       <div id="btnOptionsContainer">
-          <button id="changeColorBtn">Rouge!</button>
+          <button class="changeColorBtn" data-id="red">Rouge!</button>
+          <button class="changeColorBtn" data-id="blue">Blue!</button>
+          <button class="changeColorBtn" data-id="green">Green!</button>
       </div>      
     </div>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="../ressources/index.js"></script>
+    <script src="../ressources/game.js"></script>
   </body>
 </html>

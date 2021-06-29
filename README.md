@@ -1,4 +1,4 @@
-# chatWeb
+# ChatWeb
 ## Simple Chat avec Socket.io et express
 
 ### Pré-requis :
@@ -34,4 +34,4 @@ express@4.17.1
 > node server.js
 
 ### Documentation : 
-* [Sokcet.io](https://socket.io/get-started/chat/) - Créer un système de Chat en temps réel
+* [Socket.io](https://socket.io/get-started/chat/) - Créer un système de Chat en temps réel
